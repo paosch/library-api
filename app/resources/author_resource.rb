@@ -5,7 +5,8 @@ class AuthorResource < JSONAPI::Resource
   def self.apply_filter(records, filter, value, options)
     case filter
       when :query
-        records.where({last: value.first})
+        records.where("last LIKE ?", "%#{value.first}%")
+          .or(records.where("first LIKE ?", "%#{value.first}%"))
       else 
         super
     end
